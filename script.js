@@ -1,10 +1,10 @@
 /* A constant variable that is used to store the URL of the GitHub API. */
-const APIURL = 'https://api.github.com/users/'
+const APIURL = "https://api.github.com/users/";
 
 /* Getting the elements from the HTML file. */
-const main = document.getElementById('main')
-const form = document.getElementById('form')
-const search = document.getElementById('search')
+const main = document.getElementById("main");
+const form = document.getElementById("form");
+const search = document.getElementById("search");
 
 /**
  * It's an async function that takes a username as an argument, and then it tries to get the user's
@@ -14,13 +14,13 @@ const search = document.getElementById('search')
  */
 async function getUser(username) {
   try {
-    const { data } = await axios(APIURL + username)
+    const { data } = await axios(APIURL + username);
 
-    createUserCard(data)
-    getRepos(username)
+    createUserCard(data);
+    getRepos(username);
   } catch (err) {
     if (err.response.status == 404) {
-      createErrorCard('No profile with this username')
+      createErrorCard("No profile with this username");
     }
   }
 }
@@ -32,11 +32,11 @@ async function getUser(username) {
  */
 async function getRepos(username) {
   try {
-    const { data } = await axios(APIURL + username + '/repos?sort=created')
+    const { data } = await axios(APIURL + username + "/repos?sort=created");
 
-    addReposToCard(data)
+    addReposToCard(data);
   } catch (err) {
-    createErrorCard('Problem fetching repos')
+    createErrorCard("Problem fetching repos");
   }
 }
 
@@ -45,8 +45,8 @@ async function getRepos(username) {
  * @param user - the user object
  */
 function createUserCard(user) {
-  const userID = user.name || user.login
-  const userBio = user.bio ? `<p>${user.bio}</p>` : ''
+  const userID = user.name || user.login;
+  const userBio = user.bio ? `<p>${user.bio}</p>` : "";
   const cardHTML = `
     <div class="card">
     <div>
@@ -63,8 +63,8 @@ function createUserCard(user) {
       <div id="repos"></div>
     </div>
   </div>
-    `
-  main.innerHTML = cardHTML
+    `;
+  main.innerHTML = cardHTML;
 }
 
 /**
@@ -77,9 +77,9 @@ function createErrorCard(msg) {
         <div class="card">
             <h1>${msg}</h1>
         </div>
-    `
+    `;
 
-  main.innerHTML = cardHTML
+  main.innerHTML = cardHTML;
 }
 
 /**
@@ -87,31 +87,31 @@ function createErrorCard(msg) {
  * @param repos - an array of objects, each object representing a repo
  */
 function addReposToCard(repos) {
-  const reposEl = document.getElementById('repos')
+  const reposEl = document.getElementById("repos");
 
   repos.slice(0, 5).forEach((repo) => {
-    const repoEl = document.createElement('a')
-    repoEl.classList.add('repo')
-    repoEl.href = repo.html_url
-    repoEl.target = '_blank'
-    repoEl.innerText = repo.name
+    const repoEl = document.createElement("a");
+    repoEl.classList.add("repo");
+    repoEl.href = repo.html_url;
+    repoEl.target = "_blank";
+    repoEl.innerText = repo.name;
 
-    reposEl.appendChild(repoEl)
-  })
+    reposEl.appendChild(repoEl);
+  });
 }
 
 /* It's an event listener that listens for a submit event on the form element. When the event
 is triggered, it prevents the default behavior of the form, which is to reload the page. Then it
 gets the value of the search input, and if it's not empty, it calls the getUser function with the
 value of the search input as an argument. Finally, it clears the search input. */
-form.addEventListener('submit', (e) => {
-  e.preventDefault()
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-  const user = search.value
+  const user = search.value;
 
   if (user) {
-    getUser(user)
+    getUser(user);
 
-    search.value = ''
+    search.value = "";
   }
-})
+});
